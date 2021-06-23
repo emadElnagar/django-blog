@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+
+  
+    {% if user.is_authenticated %}
+        <section>
+            <div class="container">
+                <div class="col-10 mx-auto">
+                    <h2>User : {{ user.get_username }}</h2>
+                    <a href="{% url 'logout'%}" class="btn btn-primary submit">Logout</a>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <section>
+            <div class="container">
+                <div class="col-10 mx-auto">
+                    <form method="post" action="{% url 'login' %}" class="mt-5 my-form">
+                        {{form}}
+                        {% csrf_token %}
+                        <input type="submit" value="login" class="btn btn-primary mt-2" />
+                        {% if next %}
+                            <input type="hidden" name="next" value="{{ next }}" />
+                        {% else %}
+                            <input type="hidden" name="next" value="/" />
+                        {% endif %}
+                    </form>
+                    <p class="my-2"><a href="{% url 'password_reset' %}">Lost password?</a></p>
+                    <span>don't have account ?</span>
+                    <a href="/accounts/signup" class="text-primary">signup</a>
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+{% endblock %}

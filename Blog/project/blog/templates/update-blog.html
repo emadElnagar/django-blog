@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block body %}
+    {% if request.user == post.author %}
+        <div class="container">
+            <div class="row">
+                <section class="col-10 mx-auto">
+                    <h1 class="text-capitalize text-center">update your article</h1>
+                    <form method="POST" enctype="multipart/form-data" class="my-form">
+                        {{updateForm.as_ul}}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary submit">update</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    {% else %}
+        <section>
+            <h1 class="text-capitalize text-center text-danger">sorry, you aren't allowed here !</h1>
+        </section>
+    {% endif %}
+
+{% endblock body %}

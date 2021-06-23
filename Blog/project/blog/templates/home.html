@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+    <img src="{% static 'img/bram-naus-n8Qb1ZAkK88-unsplash.jpg' %}" class="img-fluid">
+    <section>
+        <div class="container">
+            <div class="row">
+                
+                {% comment %} START POST {% endcomment %}
+                {% for post in posts %}
+                    <div class="col-12 col-md-4">
+                        <div class="post mb-4">
+                            <img src="{{post.image.url}}" class="img-thumbnail">
+                            <div class="row mt-2">
+                                <div class="col-10">
+                                    <h4 class="text-capitalize">{{post}}</h4>
+                                </div>
+                                <div class="col-2">
+                                    {% if post.author == request.user %}
+                                        <div class="btn-group">
+                                            <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{% url 'blog:update_post' post.slug %}">
+                                                    <div class="row">
+                                                        <div class="col-6">edit</div>
+                                                        <div class="col-6"><i class="fas fa-pencil-alt"></i></div>
+                                                    </div>
+                                                </a>
+                                                <a class="dropdown-item" href="{% url 'blog:delete_post' post.slug %}">
+                                                    <div class="row">
+                                                        <div class="col-6">delete</div>
+                                                        <div class="col-6"><i class="fas fa-trash-alt"></i></div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <p class="m-0 d-inline">{{post.body|slice:50}} ... </p>
+                            <a href="{% url 'blog:blog_single' post.slug %}" class="text-danger">read article</a>
+                            <div class="author mt-2">
+                                <div class="row">
+                                    <div class="col-2">
+                                        {% if post.author.profile.image %}
+                                            <img src="{{post.author.profile.image.url}}" class="img-fluid rounded-circle">
+                                        {% else %}
+                                            <img src="{% static 'img/default-user-image.png' %}" class="img-fluid rounded-circle">
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-10">
+                                        {% if post.author.first_name and post.author.last_name %}
+                                            <span class="text-capitalize d-block">by : 
+                                                <a href="{% url 'accounts:profile' post.author.profile.id %}">
+                                                    {{post.author.first_name}} {{post.author.last_name}}
+                                                </a>
+                                            </span>
+                                        {% else %}
+                                            <span class="text-capitalize d-block">by : 
+                                                <a href="{% url 'accounts:profile' post.author.profile.id %}">
+                                                    {{post.author}}
+                                                </a>
+                                            </span>
+                                        {% endif %}
+                                        <small><span class="text-capitalize text-secondary">{{post.get_date}}</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    </div>
+                {% endfor %}
+                {% comment %} END POST {% endcomment %}
+
+            </div>
+            
+            {% comment %} START PAGINATION {% endcomment %}
+            {% if posts.has_other_pages %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if posts.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{posts.previous_page_number}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% for page in posts.paginator.page_range %}
+                            <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+                        {% endfor %}
+                        {% if posts.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{posts.next_page_number}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+            {% comment %} END PAGINATION {% endcomment %}
+
+        </div>
+    </section>
+{% endblock body %}

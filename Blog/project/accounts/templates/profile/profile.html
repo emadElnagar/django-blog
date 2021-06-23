@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+
+<section>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 col-md-6 mx-auto">
+                {% if profile.image %}
+                    <img src="{{profile.image.url}}" class="img-fluid">
+                {% else %}
+                    <img src="{% static 'img/default-user-image.png' %}" class="img-fluid">
+                {% endif %}
+                <div class="text-center mt-4">
+                    {% if profile.user.first_name and profile.user.last_name %}
+                        <h1 class="text-capitalize">{{profile.user.first_name}} {{profile.user.last_name}}</h1>
+                    {% else %}
+                        <h1 class="text-capitalize">{{profile.user}}</h1>
+                    {% endif %}
+
+                    {% if profile.birth_date %}
+                        <h4 class="text-capitalize mt-3">birth date : {{profile.birth_date|date:'d M o'}}</h4>
+                        <h4 class="text-capitalize mt-3">{{profile.calculate_age}} years old</h4>
+                    {% endif %}
+                </div>
+                {% if request.user == profile.user %}
+                    <div class="d-flex justify-content-center mt-4">
+                        <a href="{% url 'accounts:profile_edit' %}" class="btn btn-secondary text-capitalize">edit my info</a>
+                        <a href="{% url 'accounts:change_password' %}" class="btn btn-warning text-capitalize ml-2">change password</a>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+                <div class="col-12 col-md-4">
+                    <div class="post mb-4">
+                        <img src="{{post.image.url}}" class="img-thumbnail">
+                        <div class="row mt-2">
+                            <div class="col-10">
+                                <h4 class="text-capitalize">{{post}}</h4>
+                            </div>
+                            <div class="col-2">
+                                {% if post.author == request.user %}
+                                    <div class="btn-group">
+                                        <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="{% url 'blog:update_post' post.slug %}">
+                                                <div class="row">
+                                                    <div class="col-6">edit</div>
+                                                    <div class="col-6"><i class="fas fa-pencil-alt"></i></div>
+                                                </div>
+                                            </a>
+                                            <a class="dropdown-item" href="{% url 'blog:delete_post' post.slug %}">
+                                                <div class="row">
+                                                    <div class="col-6">delete</div>
+                                                    <div class="col-6"><i class="fas fa-trash-alt"></i></div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="m-0 d-inline">{{post.body|slice:50}} ... </p>
+                        <a href="{% url 'blog:blog_single' post.slug %}" class="text-danger">read article</a>
+                        <div class="author mt-2">
+                            <div class="row">
+                                <div class="col-2">
+                                    {% if post.author.profile.image %}
+                                        <img src="{{post.author.profile.image.url}}" class="img-fluid rounded-circle">
+                                    {% else %}
+                                        <img src="{% static 'img/default-user-image.png' %}" class="img-fluid rounded-circle">
+                                    {% endif %}
+                                </div>
+                                <div class="col-10">
+                                    {% if post.author.first_name %}
+                                        <span class="text-capitalize d-block">by : 
+                                            {{post.author.first_name}} {{post.author.last_name}}
+                                        </span>
+                                    {% else %}
+                                        <span class="text-capitalize d-block">by : 
+                                            {{post.author}}
+                                        </span>
+                                    {% endif %}
+                                    <small><span class="text-capitalize text-muted">{{post.get_date}}</span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock body %}

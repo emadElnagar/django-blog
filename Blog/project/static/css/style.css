@@ -1,0 +1,69 @@
+section {
+    margin-top: 80px;
+}
+a:hover {
+    text-decoration: none;
+}
+.post i {
+    visibility: hidden;
+}
+.post:hover i {
+    visibility: visible;
+}
+.comment-body i {
+    visibility: hidden;
+}
+.comment-body:hover i {
+    visibility: visible;
+}
+form li {
+    list-style: none;
+}
+.my-form input,
+.my-form .submit,
+.my-form textarea {
+    width: 100%;
+}
+.my-form textarea {
+    resize: none;
+}
+.my-form .submit {
+    margin-top: 20px;
+}
+.pagination {
+    margin-top: 30px;
+}
+.invalid, .invalid .submit,
+.invalid textarea, .invalid input {
+    cursor: not-allowed;
+}
+.post i {
+    font-size: 16px;
+}
+.post-single .fa-comment,
+.post-single .fa-thumbs-up {
+    font-size: 26px;
+}
+.vr {
+    border-left: 1px solid #ddd;
+}
+.my-btn {
+    border: none;
+    background: none;
+}
+.reply {
+    font-size: 14px;
+}
+.comment-body {
+    font-size: 16px;
+}
+.comment-form textarea {
+    height: 100px;
+}
+.comment-form .submit {
+    width: 150px;
+}
+.user-profile-img {
+    width: 25px;
+    height: 25px;
+}

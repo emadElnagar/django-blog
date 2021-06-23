@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawsome/fontawsomefiles/all.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/fontawsome/fontawsomefiles/fontawsome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Creative Blog</title>
+</head>
+<body>
+    {% comment %} ========== STAR NAVBAR ========== {% endcomment %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand text-uppercase" href="/"><i class="fas fa-blog"></i> creative blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" href="/">home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-capitalize" href="/add-new-post">new post</a>
+                </li>
+            </ul>
+            <form class="form-inline my-0 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown mr-5 ml-2">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if request.user.profile.image %}
+                                <img src="{{request.user.profile.image.url}}" class="rounded-circle mr-1 user-profile-img">
+                            {% else %}
+                                <img src="{% static 'img/default-user-image.png' %}" class="rounded-circle mr-1 user-profile-img">
+                            {% endif %}
+                            {{request.user}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="nav-link text-capitalize text-dark" href="{% url 'accounts:profile' user.profile.id %}">
+                            <div class="row">
+                                <div class="col-6">
+                                    profile
+                                </div>
+                                <div class="col-6">
+                                    <i class="fas fa-id-badge"></i>
+                                </div>
+                            </div>
+                            </a>
+                            <a class="nav-link text-capitalize text-dark" href="{% url 'logout'%}">
+                            <div class="row">
+                                <div class="col-6">
+                                    logout
+                                </div>
+                                <div class="col-6">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </div>
+                            </div>
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item bg-primary ml-0 ml-lg-3 mt-2 mt-lg-0 px-2">
+                        <a class="nav-link text-capitalize text-light" href="/accounts/login">login</a>
+                    </li>
+                    <li class="nav-item bg-success ml-0 ml-lg-2 mt-2 mt-lg-0 px-2">
+                        <a class="nav-link text-capitalize text-light" href="/accounts/signup">signup</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    {% comment %} ========== END NAVBAR ========== {% endcomment %}
+    
+    {% block body %}
+    {% endblock body %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

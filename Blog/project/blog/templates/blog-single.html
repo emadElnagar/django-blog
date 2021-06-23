@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-10 mx-auto">
+                <div class="post-single">
+                    <img src="{{post.image.url}}" class="img-fluid">
+                    <div class="row">
+                        <div class="col-11">
+                            <h1 class="text-capitalize">{{post}}</h1>
+                            {% if post.author.first_name %}
+                                <span class="text-capitalize d-block">by : 
+                                    <a href="{% url 'accounts:profile' post.author.profile.id %}">
+                                        {{post.author.first_name}} {{post.author.last_name}}
+                                    </a>
+                                </span>
+                            {% else %}
+                                <span class="text-capitalize d-block">by : 
+                                    <a href="{% url 'accounts:profile' post.author.profile.id %}">
+                                        {{post.author}}
+                                    </a>
+                                </span>
+                            {% endif %}
+                            <span class="text-capitalize d-block">created at : {{post.created_at|date:'d M o'}}</span>
+                            <span class="text-capitalize d-block">last update : {{post.last_update|date:'d M o'}}</span>
+                        </div>
+                        <div class="col-1">
+                            {% if post.author == request.user %}
+                                <div class="btn-group">
+                                    <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{% url 'blog:update_post' post.slug %}">
+                                            <div class="row">
+                                                <div class="col-6">edit</div>
+                                                <div class="col-6"><i class="fas fa-pencil-alt"></i></div>
+                                            </div>
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'blog:delete_post' post.slug %}">
+                                            <div class="row">
+                                                <div class="col-6">delete</div>
+                                                <div class="col-6"><i class="fas fa-trash-alt"></i></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr class="bg-light">
+                    <p>
+                        {{post.body}}
+                    </p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="text-center">
+                                {% if user.is_authenticated %}
+                                    <a href="#comment" class="text-dark"><i class="far fa-comment fa-fw"></i></a>
+                                {% else %}
+                                    <a href="/accounts/login" class="text-dark"><i class="far fa-comment fa-fw"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center vr">
+                                <form action="{% url 'blog:like_post' post.slug %}" method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="post_slug" value="{{post.slug}}">
+                                    {% if request.user in post.liked.all %}
+                                        <button type="submit" class="my-btn">
+                                            <i class="far fa-thumbs-up fa-fw text-primary"></i>
+                                        </button>
+                                    {% else %}
+                                        <button type="submit" class="my-btn">
+                                            <i class="far fa-thumbs-up fa-fw"></i>
+                                        </button>
+                                    {% endif %}
+                                </form>
+                                {% if post.like_num > 0 %}
+                                    <big>
+                                        <button type="button" class="text-primary my-btn" data-toggle="modal" data-target="#exampleModal">
+                                            {{post.like_num}}
+                                        </button>
+                                    </big>
+                                {% else %}
+                                    <big>
+                                        {{post.like_num}}
+                                    </big>
+                                {% endif %}
+
+                                {% comment %} MODAL {% endcomment %}
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">users liked that article</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% for user in post.liked.all %}
+                                                <a href="{% url 'accounts:profile' user.profile.id %}">
+                                                    <div class="row mt-2">
+                                                        <div class="col-2">
+                                                            {% if user.profile.image %}
+                                                                <img src="{{user.profile.image.url}}" class="w-75 rounded-circle">
+                                                            {% else %}
+                                                                <img src="{% static 'img/default-user-image.png' %}" class="img-fluid rounded-circle">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="col-10">
+                                                            <h6 class="text-left text-capitalize py-2">
+                                                                {% if user.first_name and user.last_name %}
+                                                                    {{ user.first_name }} {{ user.last_name }}
+                                                                {% else %}
+                                                                    {{ user.username }}
+                                                                {% endif %}
+                                                            </h6>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% comment %} END MODAL {% endcomment %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+
+
+                <div class="comments">
+                   {% if user.is_authenticated %}
+                    <div class="col-12 p-0"> 
+                            <form class="my-form comment-form" method="POST" id="comment">
+                                {% csrf_token %}
+                                {{comment_form}}
+                                <button type="submit" class="btn btn-success mt-1"><i class="fas fa-paper-plane"></i></button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <div class="col-12 p-0">
+                            <fieldset disabled="disabled">
+                                <form class="my-form comment-form invalid" method="POST">
+                                    {% csrf_token %}
+                                    {{comment_form}}
+                                </form>
+                            </fieldset>
+                            <span><a href="/accounts/login?next=/{{post.slug}}">login</a> to write your comment</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="comment ">
+
+                        {% for comment in comments %}
+                            {% if comment.post.id == post.id %}
+                                <div class="row comment-body mt-2">
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <div class="col-1">
+                                                <a href="{% url 'accounts:profile' comment.user_commented.profile.id %}">
+                                                    {% if comment.user_commented.profile.image %}
+                                                        <img src="{{ comment.user_commented.profile.image.url }}" class="img-fluid rounded-circle">
+                                                    {% else %}
+                                                        <img src="{% static 'img/default-user-image.png' %}" class="img-fluid rounded-circle">
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            <div class="col-11">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a href="{% url 'accounts:profile' comment.user_commented.profile.id %}" class="text-capitalize">
+                                                            {% if comment.user_commented.first_name and comment.user_commented.last_name %}
+                                                                    <b>{{comment.user_commented.first_name}} {{comment.user_commented.last_name}}</b>
+                                                            {% else %}
+                                                                    <b>{{comment.user_commented}}</b>
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <small class="text-muted">{{comment.commented_at|date:'j M o'}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        {{comment.comment_body}}
+                                    </div>
+                                </div>
+                                <hr>
+                            {% endif %}
+                        {% endfor %}
+
+                        
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
