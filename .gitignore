@@ -1,0 +1,5 @@
+Lib/
+media/*
+Scripts/
+include/
+pyvenv.cfg
