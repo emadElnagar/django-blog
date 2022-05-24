@@ -2,4 +2,6 @@ Lib/
 media/*
 Scripts/
 include/
+__pycache__/
 pyvenv.cfg
+db.sqlite3
