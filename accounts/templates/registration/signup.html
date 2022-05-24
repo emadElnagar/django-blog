@@ -1,7 +1,5 @@
-{% extends "base_generic.html" %}
-
-{% block content %}
-
+{% extends "base.html" %}
+{% block body %}
     {% if user.is_authenticated %}
         <h2>User : {{ user.get_username }}</h2>
         <a href="{% url 'logout'%}" class="btn btn-primary submit">Logout</a>
@@ -12,5 +10,4 @@
             <input type="submit" value="signup" class="btn btn-primary mt-3" />
         </form>
     {% endif %}
-
-{% endblock %}
+{% endblock body %}

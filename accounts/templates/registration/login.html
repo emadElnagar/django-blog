@@ -1,6 +1,6 @@
-{% extends "base_generic.html" %}
+{% extends "base.html" %}
 
-{% block content %}
+{% block body %}
 
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
@@ -47,4 +47,4 @@
         </section>
     {% endif %}
 
-{% endblock %}
+{% endblock body %}
