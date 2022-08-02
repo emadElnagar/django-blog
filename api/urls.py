@@ -4,5 +4,6 @@ from django.urls import path
 app_name = 'api'
 
 urlpatterns = [
-    path('', views.PostsList),
+    path('posts', views.PostsList),
+    path('posts/<str:slug>', views.SinglePost),
 ]
