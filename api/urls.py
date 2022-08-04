@@ -6,4 +6,5 @@ app_name = 'api'
 urlpatterns = [
     path('posts', views.PostsList),
     path('posts/<str:slug>', views.SinglePost),
+    path('posts/<str:slug>/comments', views.PostComments),
 ]
