@@ -8,4 +8,5 @@ urlpatterns = [
     path('posts/new', views.CreateNewPost),
     path('posts/<str:slug>', views.SinglePost),
     path('posts/<str:slug>/comments', views.PostComments),
+    path('posts/<str:slug>/delete', views.DeletePost),
 ]
