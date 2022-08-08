@@ -54,3 +54,14 @@ def DeletePost(request, slug):
         post.delete()
         return Response({"status":"ok"}, status = status.HTTP_200_OK)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# UPDATE POST
+@api_view(['PUT'])
+def UpdatePost(request, slug):
+    post = Post.objects.get(slug = slug)
+    if post:
+        serializer = PostsSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
