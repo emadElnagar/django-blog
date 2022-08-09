@@ -37,6 +37,17 @@ def PostComments(request, slug):
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+# SINGLE COMMENT VIEW
+@api_view(['DELETE'])
+def SingleComment(request, pk):
+    comment = Comment.objects.get(id=pk)
+    # UPDATE COMMENT
+    if request.method == 'DELETE':
+        if comment:
+            comment.delete()
+            return Response({"status":"ok"}, status = status.HTTP_200_OK)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 # CREATE A NEW POST
 @api_view(['POST'])
 def CreateNewPost(request):
