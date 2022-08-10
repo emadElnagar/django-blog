@@ -79,7 +79,7 @@ def DeletePost(request, slug):
 def UpdatePost(request, slug):
     post = Post.objects.get(slug = slug)
     if post:
-        serializer = PostsSerializer(data = request.data)
+        serializer = PostsSerializer(post, data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
