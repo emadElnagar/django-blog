@@ -3,8 +3,9 @@ from django.http.response import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostsSerializer, CommentsSerializer
+from .serializers import PostsSerializer, CommentsSerializer, ProfileSerializer
 from blog.models import Post, Comment
+from accounts.models import Profile
 
 # GET ALL POSTS
 @api_view(['GET'])
@@ -84,3 +85,12 @@ def UpdatePost(request, slug):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# ==================== USERS API ==================== #
+
+# GET USER PROFILE
+@api_view(['GET'])
+def UserProfile(request, pk):
+    profile = Profile.objects.get(id=pk)
+    serializer = ProfileSerializer(profile, many = False)
+    return Response(serializer.data)

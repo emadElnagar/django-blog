@@ -4,6 +4,7 @@ from django.urls import path
 app_name = 'api'
 
 urlpatterns = [
+    # POSTS URLS
     path('posts', views.PostsList),
     path('posts/new', views.CreateNewPost),
     path('posts/<str:slug>', views.SinglePost),
@@ -11,4 +12,6 @@ urlpatterns = [
     path('posts/comments/<int:pk>', views.SingleComment),
     path('posts/<str:slug>/delete', views.DeletePost),
     path('posts/<str:slug>/update', views.UpdatePost),
+    # USERS URLS
+    path('users/profile/<int:pk>', views.UserProfile),
 ]
