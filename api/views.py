@@ -94,3 +94,14 @@ def UserProfile(request, pk):
     profile = Profile.objects.get(id=pk)
     serializer = ProfileSerializer(profile, many = False)
     return Response(serializer.data)
+
+# UPDATE PROFILE
+@api_view(['PUT'])
+def UpdateProfile(request, pk):
+    user = request.user
+    profile = Profile.objects.get(id=pk)
+    serializer = ProfileSerializer(profile, many = False)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)

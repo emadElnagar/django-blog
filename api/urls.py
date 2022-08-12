@@ -14,4 +14,5 @@ urlpatterns = [
     path('posts/<str:slug>/update', views.UpdatePost),
     # USERS URLS
     path('users/profile/<int:pk>', views.UserProfile),
+    path('users/profile/<int:pk>/update', views.UpdateProfile),
 ]
