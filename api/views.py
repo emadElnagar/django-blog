@@ -113,3 +113,13 @@ def SignUp(request):
         serializer.save()
         return Response(serializer.data, status = status.HTTP_201_CREATED)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# UPDATE USER DATA
+@api_view(['PUT'])
+def UserUpdate(request):
+    user = request.user
+    serializer = UserSerializer(user, data = request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
