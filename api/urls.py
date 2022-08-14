@@ -15,5 +15,5 @@ urlpatterns = [
     # USERS URLS
     path('users/signup', views.SignUp),
     path('users/profile/<int:pk>', views.UserProfile),
-    path('users/profile/<int:pk>/update', views.UpdateProfile),
+    path('users/profile/update', views.UpdateProfile),
 ]

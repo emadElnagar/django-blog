@@ -97,10 +97,9 @@ def UserProfile(request, pk):
 
 # UPDATE PROFILE
 @api_view(['PUT'])
-def UpdateProfile(request, pk):
-    user = request.user
-    profile = Profile.objects.get(id=pk)
-    serializer = ProfileSerializer(profile, many = False)
+def UpdateProfile(request):
+    profile = Profile.objects.get(user=request.user)
+    serializer = ProfileSerializer(profile, data = request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
