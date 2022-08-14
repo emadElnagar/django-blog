@@ -3,7 +3,7 @@ from django.http.response import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PostsSerializer, CommentsSerializer, ProfileSerializer
+from .serializers import PostsSerializer, CommentsSerializer, ProfileSerializer, UserSerializer
 from blog.models import Post, Comment
 from accounts.models import Profile
 
@@ -109,7 +109,7 @@ def UpdateProfile(request, pk):
 # USER SIGNUP
 @api_view(['POST'])
 def SignUp(request):
-    serializer = ProfileSerializer(data = request.data)
+    serializer = UserSerializer(data = request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status = status.HTTP_201_CREATED)
