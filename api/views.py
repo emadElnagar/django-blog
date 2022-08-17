@@ -6,6 +6,7 @@ from rest_framework import status
 from .serializers import PostsSerializer, CommentsSerializer, ProfileSerializer, UserSerializer
 from blog.models import Post, Comment
 from accounts.models import Profile
+from django.contrib.auth.models import User
 
 # GET ALL POSTS
 @api_view(['GET'])
@@ -122,4 +123,13 @@ def UserUpdate(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status = status.HTTP_201_CREATED)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+# DELETE USER ACCOUNT
+@api_view(['DELETE'])
+def DeleteUser(request, pk):
+    user = User.objects.get(pk=pk)
+    if user:
+        user.delete()
+        return Response({"status":"ok"}, status = status.HTTP_200_OK)
     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
