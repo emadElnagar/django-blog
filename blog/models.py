@@ -5,12 +5,13 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.dispatch import receiver
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 class Post(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    body = models.TextField()
+    body = RichTextField()
     created_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     image = models.ImageField()
